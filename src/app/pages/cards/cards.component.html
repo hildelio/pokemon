@@ -1,0 +1,25 @@
+<main class="absolute top-16 bottom-14 left-0 right-0 flex items-center justify-center">
+  <div *ngIf="pokemon$ | async as pokemon" class="max-w-sm rounded overflow-hidden shadow-lg">
+    <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" class="w-full">
+    <div class="px-6 py-4">
+      <div class="font-bold text-xl mb-2">{{ pokemon.name }}</div>
+      <p class="text-gray-700 text-base">
+        <span class="font-semibold">Height:</span> {{ pokemon.height }} | 
+        <span class="font-semibold">Weight:</span> {{ pokemon.weight }}
+      </p>
+      <div *ngIf="pokemon.abilities.length > 0" class="mt-2">
+        <span class="font-semibold">Abilities:</span>
+        <ul class="list-disc ml-4">
+          <li *ngFor="let ability of pokemon.abilities">
+            {{ ability.ability.name }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="px-6 py-4">
+      <button (click)="generateRandomPokemon()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Generate Random Pokémon
+      </button>
+    </div>
+  </div>
+</main>
