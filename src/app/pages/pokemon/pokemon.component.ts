@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { PokemonService } from '../../services/pokemon.service';
 
 interface Pokemon {
   name: string;
@@ -10,10 +10,7 @@ interface Pokemon {
 @Component({
   selector: 'app-pokemon',
   standalone: true,
-  imports: [
-    CommonModule,
-    HttpClientModule
-  ],
+  imports: [CommonModule],
   templateUrl: './pokemon.component.html',
   styleUrl: './pokemon.component.scss'
 })
@@ -22,17 +19,15 @@ export class PokemonComponent {
   currentPage = 1;
   itemsPerPage = 20;
 
-  constructor(private http: HttpClient) {}
-
+  pokemonService = inject(PokemonService);
+  
   ngOnInit(): void {
     this.loadPokemons();
   }
 
   loadPokemons(): void {
     const offset = (this.currentPage - 1) * this.itemsPerPage;
-    const url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${this.itemsPerPage}`;
-
-    this.http.get<any>(url).subscribe(response => {
+    this.pokemonService.getPokemons(offset, this.itemsPerPage).subscribe((response) => {
       this.pokemonList = response.results;
     });
   }

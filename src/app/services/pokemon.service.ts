@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,14 +7,17 @@ import { Observable } from 'rxjs';
 })
 export class PokemonService {
 
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
     
-  getPokemons(): Observable<any> {
-    return this.http.get('https://pokeapi.co/api/v2/pokemon');
+  getPokemons(offset: number, limit: number): Observable<any> {
+    const url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`;
+    return this.http.get<any>(url);
   }
 
   getRandomPokemon(): Observable<any> {
-    return this.http.get(`https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 151) + 1}`);
+    const randomId = Math.floor(Math.random() * 151) + 1;
+    const url = `https://pokeapi.co/api/v2/pokemon/${randomId}`;
+    return this.http.get<any>(url);
   }
 
 }
